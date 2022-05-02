@@ -11,7 +11,8 @@ git branch: 'development', url: 'https://github.com/spdgit/maven-web-application
 //Do the build by using mvn Build Tool
 stage('Build'){
 sh "${mavenHome}/bin/mvn clean package"
-}  
+} 
+/*
 //Execute the sonarQubeReport
 stage('Execute SonarQube Report'){
 sh "${mavenHome}/bin/mvn sonar:sonar"
@@ -28,4 +29,5 @@ sshagent(['6525964e-bde0-47bb-9dea-7c5cdfb77776']){
     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15.207.98.45:/opt/apache-tomcat-9.0.62/webapps"
 }    
 }
+*/
 }
