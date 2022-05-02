@@ -21,7 +21,7 @@ if (buildstatus == 'STARTED') {
   }  
    
  //Send Notifications
- slackSend (color: colorCode, message: summary )
+ slackSend (color: colorCode, message: summary)
  }
  
  
