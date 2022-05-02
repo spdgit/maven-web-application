@@ -35,6 +35,7 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKe
 def mavenHome = tool name: "maven3.8.5"
 try {
 
+sendSlackNotifications('STARTED')
 //Get the code from github repo    
 stage('CheckOutCode'){
 git branch: 'development', url: 'https://github.com/spdgit/maven-web-application.git'
