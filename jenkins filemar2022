@@ -1,3 +1,30 @@
+def sendSlackNotifications(String buildStatus = 'STARTED') {
+
+buildStatus = buildStatus ?: 'SUCCESS'
+
+//Default values
+def colorName = 'RED'
+def colorCode = '#FF0000'
+def subject  = "${buildstatus}: Job '${env.JOB_NAME} [${env.BUILD_NAME}]'"
+def summary = "${subject} (${env.BUILD_URL})"
+
+//Override default values based on build status
+if (buildstatus == 'STARTED') {
+   color = 'YELLOW'
+   colorCode = '#FFFF00'
+ } else if (buildStatus == 'SUCCESS') {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+ } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }  
+   
+ //Send Notifications
+ slackSend (color: colorCode, message: summary )
+ }
+ 
+ 
 node{
 
 echo "Job Name is: ${env.JOB_NAME}"
@@ -6,6 +33,8 @@ echo "Node Name is: ${env.NODE_NAME}"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
 
 def mavenHome = tool name: "maven3.8.5"
+try {
+
 //Get the code from github repo    
 stage('CheckOutCode'){
 git branch: 'development', url: 'https://github.com/spdgit/maven-web-application.git'
@@ -32,4 +61,12 @@ sshagent(['6525964e-bde0-47bb-9dea-7c5cdfb77776']){
 }    
 }
 */
+}//Try closing
+catch(e) {
+currentBuild.result = "FAILED"
 }
+finally{
+sendSlackNotifications(currentBuild.result)
+}
+}//Node closing
+
