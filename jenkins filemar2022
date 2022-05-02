@@ -5,11 +5,11 @@ buildStatus = buildStatus ?: 'SUCCESS'
 //Default values
 def colorName = 'RED'
 def colorCode = '#FF0000'
-def subject  = "${buildstatus}: Job '${env.JOB_NAME} [${env.BUILD_NAME}]'"
+def subject  = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NAME}]'"
 def summary = "${subject} (${env.BUILD_URL})"
 
 //Override default values based on build status
-if (buildstatus == 'STARTED') {
+if (buildStatus == 'STARTED') {
    color = 'YELLOW'
    colorCode = '#FFFF00'
  } else if (buildStatus == 'SUCCESS') {
